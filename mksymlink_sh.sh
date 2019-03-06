@@ -15,3 +15,5 @@ for file in $files; do
 	fi
 	sudo ln -sf $dir/$file $outdir/$sfile
 done
+
+
