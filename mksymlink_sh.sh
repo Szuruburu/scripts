@@ -11,7 +11,7 @@ cd $dir
 for file in $files; do
 	ext="${file##*.}"
 	if [[ $ext =~ sh ]]; then
-		file="${file%%.*}"
+		sfile="${file%%.*}"
 	fi
-	sudo ln -sf $dir/$file $outdir/$file
+	sudo ln -sf $dir/$file $outdir/$sfile
 done
