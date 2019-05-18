@@ -51,7 +51,6 @@ if [ "$VERBOSE" = true ]; then
 fi
 
 
-
 # Variables -------------------------------------------------------------
 
 # Working directory contains a copy of the original unblured image,
@@ -80,7 +79,7 @@ if [[ $(tail -n1 ~/.fehbg | cut -d "'" -f2) = "$CACHEDIR/trans-9" ]]; then
 fi
 
 
-if [ -z "$TIME" ]; then TIME=0.01; fi
+if [ -z "$TIME" ]; then TIME=0.0001; fi
 #echo "Transition time is set to: "$TIME
 
 CURRWORKSPACE=$(wmctrl -d | grep '*' | cut -d ' ' -f1)
@@ -232,7 +231,7 @@ while true; do
         fi
     fi
 
-	sleep 0.1
+	sleep 0.01
     #sleep 0.5
 done
 
