@@ -2,7 +2,7 @@
 
 # set variables
 app_title="JavaScript Dev Tree Creator"
-HOME="/home/szuruburu"
+HOME="/home/archwork"
 working_dir="$HOME/.config/make_js_projects"
 project_name="$working_dir/project_name"
 project_root="$working_dir/project_root"
@@ -27,6 +27,8 @@ function showMainMenu() {
 		--menu "\n" 10 60 6 1 "RUN" 2 "Change projects root folder" 3 "Edit folders tree" 2>$menu_choice
 }
 
+mkdir -p $working_dir
+
 # create files
 >$project_name
 if [ -f "$project_root" ]
@@ -36,8 +38,6 @@ then
 else
 	echo "dev" > $project_root
 fi
-
-mkdir -p $working_dir
 
 # cleanup  - add a trap that will remove $OUTPUT
 # if any of the signals - SIGHUP SIGINT SIGTERM it received.
@@ -71,13 +71,17 @@ if [ "$?" = "0" ]
 		clear
 		printf "Creating your \"$project_name\" project\n"
 		printf "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n"
-		cd ~/dev/
+		if [ -f "$project_root" ]
+		then
+			mkdir "$HOME/$(cat $project_root)"
+		fi
+		cd "$HOME/$(cat $project_root)"
 		mkdir -p "$project_name"
-		printf "Created $HOME/dev/\e[1m\e[31m$project_name \e[0mfolder\n"
+		printf "Created $HOME/$(cat $project_root)/\e[1m\e[31m$project_name \e[0mfolder\n"
 		mkdir -p "$project_name"/src
-		printf "Created $HOME/dev/$project_name/\e[1m\e[31msrc \e[0mfolder\n"
+		printf "Created $HOME/$(cat $project_root)/$project_name/\e[1m\e[31msrc \e[0mfolder\n"
 		mkdir -p "$project_name"/styles
-		printf "Created $HOME/dev/$project_name/\e[1m\e[31mstyles \e[0mfolder\n"
+		printf "Created $HOME/$(cat $project_root)/$project_name/\e[1m\e[31mstyles \e[0mfolder\n"
 
 		printf "Deleted temp files\n"
 		rm $menu_choice
@@ -106,9 +110,19 @@ if [ "$?" = "0" ]
 			dialog --title "List file of directory /tmp" --msgbox "$(ls /tmp -l)" 100 100
 fi
 
-
 # Cancel is pressed
 else
-	exit_program
+	case $response in
+	$DIALOG_CANCEL)
+		exit_program
+		exit
+		;;
+	$DIALOG_ESC)
+		clear
+		echo "Program aborted." >&2
+		exit 1
+		;;
+	esac
+	# exit_program
 fi
 
